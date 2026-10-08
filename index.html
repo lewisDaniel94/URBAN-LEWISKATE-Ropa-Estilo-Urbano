@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBAN SKATE LWIS. • Black & White Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand-title">LEWI<span>SKATE</span></a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-link" style="cursor: pointer;">
+                        Tienda <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                    </div>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item" onclick="filterCategory('all')">Ver Todo (36)</button>
+                        <button class="dropdown-item" onclick="filterCategory('hoodies')">Hoodies (9)</button>
+                        <button class="dropdown-item" onclick="filterCategory('tees')">Oversized Tees (9)</button>
+                        <button class="dropdown-item" onclick="filterCategory('pants')">Pantalones Baggy (9)</button>
+                        <button class="dropdown-item" onclick="filterCategory('accessories')">Accesorios (9)</button>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="#aboutSection" class="nav-link" style="background: none; border: none;">Sobre Nosotros</a>
+                </li>
+            </ul>
+
+            <button class="cart-icon-btn" onclick="toggleCartDrawer(true)">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>Bolsa</span>
+                <span class="cart-badge" id="cartCount">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <div class="main-container">
+        
+        <!-- Banner Principal Monocromático -->
+        <section class="hero-banner">
+            <img src="https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="hero-bg-img">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Monochrome Streetwear 2026</h1>
+                <p>Indumentaria pesada de alta gama. Expresión urbana pura reducida a su máxima expresión en blanco y negro.</p>
+                <button class="hero-btn" onclick="scrollToCatalog()">Ver Colección Completa</button>
+            </div>
+        </section>
+
+        <!-- Catálogo Dinámico -->
+        <section id="catalogSection">
+            <h2 class="section-title" id="sectionTitleHeader">Catálogo Completo</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Se llena automáticamente con JavaScript -->
+            </div>
+        </section>
+
+        <!-- Sección Sobre Nosotros -->
+        <section id="aboutSection" class="about-section">
+            <h2>Sobre Urban Skate Co.</h2>
+            <p>Trabajamos bajo una filosofía purista. Sin colores innecesarios, enfocados totalmente en las texturas, los cortes oversized extremos, los gramajes pesados y la durabilidad absoluta para el asfalto.</p>
+        </section>
+
+    </div>
+
+    <!-- 1. Panel Lateral del Carrito (Desliza de derecha a izquierda) -->
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="toggleCartDrawer(false)"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+            <h3>Tu Bolsa de Compras</h3>
+            <button class="close-drawer-btn" onclick="toggleCartDrawer(false)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="cart-items-list" id="cartItemsList">
+            <!-- Se llena dinámicamente con JS -->
+        </div>
+
+        <div class="cart-drawer-footer">
+            <!-- Botón para Vaciar Bolsa -->
+            <button onclick="clearCart()" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 8px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-bottom: 12px; transition: all 0.2s;">
+                <i class="fa-solid fa-trash-can"></i> Vaciar Bolsa
+            </button>
+
+            <div class="cart-total-row">
+                <span>Subtotal General:</span>
+                <span id="drawerCartTotal">$0.00</span>
+            </div>
+            <!-- Botón para abrir el formulario de datos -->
+            <button class="btn-checkout-primary" onclick="openCheckoutModal()">
+                Finalizar Compra <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. Ventana Modal de Formulario de Datos y Envío -->
+    <div class="checkout-modal-overlay" id="checkoutModalOverlay">
+        <div class="checkout-modal">
+            <div class="checkout-modal-header">
+                <h3>Completar Datos de Envío</h3>
+                <button class="close-modal-btn" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="checkout-modal-body">
+                <form id="orderForm" onsubmit="submitOrderToWhatsApp(event)">
+                    <div class="form-group">
+                        <label for="clientName">Nombre y Apellido *</label>
+                        <input type="text" id="clientName" required placeholder="Ej. Carlos Pérez">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="clientPhone">Teléfono / WhatsApp *</label>
+                        <input type="tel" id="clientPhone" required placeholder="Ej. +58 412 0000000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientAddress">Dirección de Entrega *</label>
+                        <textarea id="clientAddress" rows="2" required placeholder="Calle, número, ciudad, punto de referencia..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientNote">Nota u Observación (Opcional)</label>
+                        <textarea id="clientNote" rows="2" placeholder="Ej. Tocar el timbre con fuerza, dejar en recepción..."></textarea>
+                    </div>
+
+                    <div class="order-summary-mini">
+                        <p><strong>Total a Pagar:</strong> <span id="checkoutModalTotal">$0.00</span></p>
+                    </div>
+
+                    <button type="submit" class="btn-whatsapp-submit">
+                        <i class="fa-brands fa-whatsapp"></i> Realizar Pedido por WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script con la lógica -->
+    <script src="script.js"></script>
+
+    <!-- Pie de Página (Footer) -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Columna 1: Logo y descripción -->
+            <div class="footer-col">
+                <a href="#" class="brand-title" style="display: inline-block; margin-bottom: 15px;">LEWI<span>SKATE</span></a>
+                <p>Indumentaria pesada de alta gama y streetwear monocromático. Expresión urbana pura sin concesiones.</p>
+            </div>
+
+            <!-- Columna 2: Redes Sociales -->
+            <div class="footer-col">
+                <h3>Redes Sociales</h3>
+                <p>Síguenos para ver los drops exclusivos y contenido del asfalto.</p>
+                <div class="footer-socials">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://tiktok.com" target="_blank" class="social-icon-btn" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://whatsapp.com" target="_blank" class="social-icon-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <!-- Columna 3: Contacto -->
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <ul class="footer-contact-list">
+                    <li><i class="fa-solid fa-location-dot"></i> Calle Principal, Local 4, Zona Urbana</li>
+                    <li><i class="fa-solid fa-phone"></i> +58 412 6613818</li>
+                    <li><i class="fa-solid fa-envelope"></i> habanolewishmail.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 LEWIS SKATE. Todos los derechos reservados.</p>
+            <p>Black & White Edition</p>
+        </div>
+    </footer>
+    <!-- Ventana Modal para Ver Imagen a Tamaño Completo -->
+    <div class="image-modal-overlay" id="imageModalOverlay" onclick="closeImageModal()">
+        <button class="close-image-modal" onclick="closeImageModal()"><i class="fa-solid fa-xmark"></i></button>
+        <img class="image-modal-content" id="expandedImg" alt="Imagen ampliada">
+    </div>
+</body>
+</html>
