@@ -344,6 +344,31 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* Botón Flotante de WhatsApp */
+.floating-whatsapp {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background-color: #25D366;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 2500;
+    transition: transform 0.3s ease, background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.floating-whatsapp:hover {
+    transform: scale(1.1);
+    background-color: #20ba5a;
+}
+
 /* Estilos del Pie de Página (Footer) */
 .footer {
     background: #0a0a0a;

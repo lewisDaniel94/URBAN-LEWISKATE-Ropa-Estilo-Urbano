@@ -1,4 +1,4 @@
-// Base de datos completa (36 productos) con categorías adaptadas
+// Base de datos completa actualizada con tus modificaciones
 const productsData = [
     // --- FRANELAS OVERSIZED (Tees) ---
     { id: 10, category: 'tees', name: 'Tee Oversized Graffiti', price: 26.00, desc: 'Jersey de algodón 280GSM con serigrafía frontal urbana.', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=500&q=80', tag: 'Hot' },
