@@ -18,26 +18,17 @@
             <ul class="nav-menu">
                 <li class="nav-item">
                     <div class="nav-link" style="cursor: pointer;">
-                        Tienda <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                        Catalogo <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
                     </div>
                     <div class="dropdown-menu">
                         <button class="dropdown-item" onclick="filterCategory('all')">Ver Todo (36)</button>
-                        <button class="dropdown-item" onclick="filterCategory('hoodies')">Hoodies (9)</button>
-                        <button class="dropdown-item" onclick="filterCategory('tees')">Oversized Tees (9)</button>
-                        <button class="dropdown-item" onclick="filterCategory('pants')">Pantalones Baggy (9)</button>
-                        <button class="dropdown-item" onclick="filterCategory('accessories')">Accesorios (9)</button>
+                        <button class="dropdown-item" onclick="filterCategory('tees')">Franelas Oversized</button>
+                        <button class="dropdown-item" onclick="filterCategory('pants')">Pantalones</button>
+                        <button class="dropdown-item" onclick="filterCategory('caps')">Gorras</button>
+                        <button class="dropdown-item" onclick="filterCategory('accessories')">Accesorios</button>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a href="#aboutSection" class="nav-link" style="background: none; border: none;">Sobre Nosotros</a>
-                </li>
             </ul>
-
-            <button class="cart-icon-btn" onclick="toggleCartDrawer(true)">
-                <i class="fa-solid fa-bag-shopping"></i>
-                <span>Bolsa</span>
-                <span class="cart-badge" id="cartCount">0</span>
-            </button>
         </div>
     </nav>
 
@@ -55,91 +46,23 @@
             </div>
         </section>
 
-        <!-- Catálogo Dinámico -->
+        <!-- Catálogo Dinámico con Buscador -->
         <section id="catalogSection">
-            <h2 class="section-title" id="sectionTitleHeader">Catálogo Completo</h2>
+            <div class="catalog-header-flex">
+                <h2 class="section-title" id="sectionTitleHeader">Catálogo Completo</h2>
+                
+                <!-- Barra de Buscador -->
+                <div class="search-box-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar franelas, pantalones, gorras..." oninput="handleSearch()">
+                </div>
+            </div>
+
             <div class="products-grid" id="productsGrid">
                 <!-- Se llena automáticamente con JavaScript -->
             </div>
         </section>
 
-        <!-- Sección Sobre Nosotros -->
-        <section id="aboutSection" class="about-section">
-            <h2>Sobre Urban Skate Co.</h2>
-            <p>Trabajamos bajo una filosofía purista. Sin colores innecesarios, enfocados totalmente en las texturas, los cortes oversized extremos, los gramajes pesados y la durabilidad absoluta para el asfalto.</p>
-        </section>
-
-    </div>
-
-    <!-- 1. Panel Lateral del Carrito (Desliza de derecha a izquierda) -->
-    <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="toggleCartDrawer(false)"></div>
-    <div class="cart-drawer" id="cartDrawer">
-        <div class="cart-drawer-header">
-            <h3>Tu Bolsa de Compras</h3>
-            <button class="close-drawer-btn" onclick="toggleCartDrawer(false)"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        
-        <div class="cart-items-list" id="cartItemsList">
-            <!-- Se llena dinámicamente con JS -->
-        </div>
-
-        <div class="cart-drawer-footer">
-            <!-- Botón para Vaciar Bolsa -->
-            <button onclick="clearCart()" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 8px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-bottom: 12px; transition: all 0.2s;">
-                <i class="fa-solid fa-trash-can"></i> Vaciar Bolsa
-            </button>
-
-            <div class="cart-total-row">
-                <span>Subtotal General:</span>
-                <span id="drawerCartTotal">$0.00</span>
-            </div>
-            <!-- Botón para abrir el formulario de datos -->
-            <button class="btn-checkout-primary" onclick="openCheckoutModal()">
-                Finalizar Compra <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- 2. Ventana Modal de Formulario de Datos y Envío -->
-    <div class="checkout-modal-overlay" id="checkoutModalOverlay">
-        <div class="checkout-modal">
-            <div class="checkout-modal-header">
-                <h3>Completar Datos de Envío</h3>
-                <button class="close-modal-btn" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="checkout-modal-body">
-                <form id="orderForm" onsubmit="submitOrderToWhatsApp(event)">
-                    <div class="form-group">
-                        <label for="clientName">Nombre y Apellido *</label>
-                        <input type="text" id="clientName" required placeholder="Ej. Carlos Pérez">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="clientPhone">Teléfono / WhatsApp *</label>
-                        <input type="tel" id="clientPhone" required placeholder="Ej. +58 412 0000000">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="clientAddress">Dirección de Entrega *</label>
-                        <textarea id="clientAddress" rows="2" required placeholder="Calle, número, ciudad, punto de referencia..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="clientNote">Nota u Observación (Opcional)</label>
-                        <textarea id="clientNote" rows="2" placeholder="Ej. Tocar el timbre con fuerza, dejar en recepción..."></textarea>
-                    </div>
-
-                    <div class="order-summary-mini">
-                        <p><strong>Total a Pagar:</strong> <span id="checkoutModalTotal">$0.00</span></p>
-                    </div>
-
-                    <button type="submit" class="btn-whatsapp-submit">
-                        <i class="fa-brands fa-whatsapp"></i> Realizar Pedido por WhatsApp
-                    </button>
-                </form>
-            </div>
-        </div>
     </div>
 
     <!-- Script con la lógica -->
@@ -181,6 +104,7 @@
             <p>Black & White Edition</p>
         </div>
     </footer>
+
     <!-- Ventana Modal para Ver Imagen a Tamaño Completo -->
     <div class="image-modal-overlay" id="imageModalOverlay" onclick="closeImageModal()">
         <button class="close-image-modal" onclick="closeImageModal()"><i class="fa-solid fa-xmark"></i></button>
