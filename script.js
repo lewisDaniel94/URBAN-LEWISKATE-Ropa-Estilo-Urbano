@@ -39,105 +39,126 @@ const productsData = [
     { id: 36, category: 'accessories', name: 'Gafas de Sol Cyberpunk', price: 22.00, desc: 'Montura geométrica oscura con protección UV400 total.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm8hX6a8w37054qLAp47u-6xGvWcgW03oh8ms8rOL3lQ&s=10', tag: 'Limitado' }
 ];
 
-let currentCategory = 'all';
+/* ===================== Lógica de la tienda ===================== */
+const WA = '584126613818';
+const CATS = { all: 'Todo el catálogo', tees: 'Franelas Oversized', pants: 'Pantalones', caps: 'Gorras', accessories: 'Accesorios' };
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const money = n => '$' + Number(n).toFixed(2);
+const state = { cat: 'all', q: '', sort: 'feat', max: 0 };
+const MAXP = Math.ceil(Math.max(...productsData.map(p => p.price)));
+let view = [], current = -1, favs = [];
+try { favs = JSON.parse(localStorage.getItem('ls-favs') || '[]'); } catch (e) {}
+const saveFavs = () => { try { localStorage.setItem('ls-favs', JSON.stringify(favs)); } catch (e) {} };
+const byId = id => productsData.find(p => p.id === +id);
+const wa = msg => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+let tT; const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2200); };
+const imgTag = p => `<img loading="lazy" src="${p.img}" alt="${p.name}" onerror="this.parentNode.classList.add('noimg');this.remove()">`;
 
-window.onload = function() {
-    displayProducts(productsData);
-};
+/* ---------- Filtros, orden y render ---------- */
+function applyFilters() {
+  let l = productsData.filter(p => (state.cat === 'all' || p.category === state.cat) && p.price <= state.max &&
+    (!state.q || (p.name + ' ' + p.desc + ' ' + p.tag + ' ' + CATS[p.category]).toLowerCase().includes(state.q)));
+  if (state.sort === 'asc') l.sort((a, b) => a.price - b.price);
+  if (state.sort === 'desc') l.sort((a, b) => b.price - a.price);
+  if (state.sort === 'az') l.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  return l;
+}
+function render() {
+  view = applyFilters();
+  $('#title').textContent = CATS[state.cat];
+  $('#count').textContent = `${view.length} ${view.length === 1 ? 'pieza' : 'piezas'}`;
+  $('#reset').style.display = (state.q || state.cat !== 'all' || state.max < MAXP) ? '' : 'none';
+  $$('.pill').forEach(b => b.classList.toggle('on', b.dataset.cat === state.cat));
+  $$('.links button').forEach(b => b.classList.toggle('on', b.dataset.cat === state.cat));
+  $('#grid').innerHTML = view.length ? view.map((p, i) => {
+    const on = favs.includes(p.id);
+    return `<article class="card" style="--i:${Math.min(i, 14)}" data-id="${p.id}">
+      <div class="media"><span class="tag">${p.tag}</span>
+        <button class="fav ${on ? 'on' : ''}" data-fav="${p.id}" aria-label="Guardar en favoritos"><i class="fa-${on ? 'solid' : 'regular'} fa-heart"></i></button>
+        ${imgTag(p)}<button class="qv" type="button">Vista rápida</button></div>
+      <div class="info"><h3>${p.name}</h3><span class="price">${money(p.price)}</span></div><p class="cat">${CATS[p.category]}</p></article>`;
+  }).join('') : `<div class="empty"><h3>Sin resultados</h3><p>Prueba con otra búsqueda o limpia los filtros.</p></div>`;
+}
+function buildStatic() {
+  $('#pills').innerHTML = Object.keys(CATS).map(k => `<button class="pill" data-cat="${k}">${k === 'all' ? 'Todo' : CATS[k]}<sup>${k === 'all' ? productsData.length : productsData.filter(p => p.category === k).length}</sup></button>`).join('');
+  $('#tiles').innerHTML = ['tees', 'pants', 'caps', 'accessories'].map(k => {
+    const f = productsData.find(p => p.category === k), n = productsData.filter(p => p.category === k).length;
+    return `<button class="tile" data-cat="${k}" data-go><img loading="lazy" src="${f.img}" alt="${CATS[k]}" onerror="this.remove()"><div><h3>${CATS[k]}</h3><span>${n} piezas <i class="fa-solid fa-arrow-right-long"></i></span></div></button>`;
+  }).join('');
+  const r = $('#max'); r.min = 5; r.max = MAXP; r.value = MAXP; state.max = MAXP; $('#maxv').textContent = money(MAXP);
+  $('#mq').innerHTML = ('<span>Black &amp; White Edition</span><span>Streetwear 2026</span><span>Alta gama</span><span>Expresión urbana</span>').repeat(4);
+}
+function setCat(c, scroll = true) { state.cat = c; $('#q').value = ''; state.q = ''; render(); if (scroll) scrollToCatalog(); }
+function scrollToCatalog() { $('#catalogo')?.scrollIntoView({ behavior: 'smooth' }); }
+window.filterCategory = setCat; window.scrollToCatalog = scrollToCatalog;
 
-// Función para filtrar productos por categoría desde el menú desplegable
-function filterCategory(category) {
-    currentCategory = category;
-    const titleHeader = document.getElementById('sectionTitleHeader');
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.value = ''; // Limpiar buscador al cambiar categoría
-    
-    if (category === 'all') {
-        if (titleHeader) titleHeader.innerText = "Catálogo Completo";
-        displayProducts(productsData);
-    } else {
-        const filtered = productsData.filter(p => p.category === category);
-        const categoryNames = {
-            'tees': 'Franelas Oversized',
-            'pants': 'Pantalones',
-            'caps': 'Gorras',
-            'accessories': 'Accesorios'
-        };
-        if (titleHeader) titleHeader.innerText = categoryNames[category] || 'Catálogo';
-        displayProducts(filtered);
-    }
-    
-    scrollToCatalog();
+/* ---------- Favoritos ---------- */
+function toggleFav(id) {
+  id = +id; const i = favs.indexOf(id);
+  if (i >= 0) { favs.splice(i, 1); toast('Quitado de tu selección'); } else { favs.push(id); toast('Guardado en tu selección'); }
+  saveFavs(); updateFavUI();
+}
+function updateFavUI() {
+  const b = $('#fcount'); b.textContent = favs.length; b.classList.toggle('show', favs.length > 0); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+  $$('[data-fav]').forEach(el => { const on = favs.includes(+el.dataset.fav); el.classList.toggle('on', on); el.innerHTML = `<i class="fa-${on ? 'solid' : 'regular'} fa-heart"></i>`; });
+  const mf = $('#mfav'); if (mf && current >= 0) mf.innerHTML = favs.includes(view[current].id) ? '<i class="fa-solid fa-heart"></i> Guardado' : '<i class="fa-regular fa-heart"></i> Guardar';
+  const items = favs.map(byId).filter(Boolean), tot = items.reduce((s, p) => s + p.price, 0);
+  $('#dbody').innerHTML = items.length ? items.map(p => `<div class="fi"><div class="ph">${imgTag(p)}</div><div><h4>${p.name}</h4><p>${money(p.price)}</p></div><button data-rm="${p.id}" aria-label="Quitar"><i class="fa-solid fa-xmark"></i></button></div>`).join('')
+    : '<div class="dempty"><i class="fa-regular fa-heart"></i>Aún no has guardado piezas.<br>Toca el corazón en cualquier producto.</div>';
+  $('#dtotal').textContent = money(tot); $('#dfoot').style.display = items.length ? '' : 'none';
+  $('#dwa').href = wa('Hola Lewis Skate, me interesan estas piezas:\n' + items.map(p => `• ${p.name} — ${money(p.price)}`).join('\n') + `\nTotal: ${money(tot)}\n¿Tienen disponibilidad y tallas?`);
 }
 
-// Función de Búsqueda en tiempo real
-function handleSearch() {
-    const searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
-    const query = searchInput.value.toLowerCase().trim();
-
-    // Tomar la base según la categoría actual
-    let baseList = currentCategory === 'all' 
-        ? productsData 
-        : productsData.filter(p => p.category === currentCategory);
-
-    // Filtrar por nombre o descripción
-    const filtered = baseList.filter(p => 
-        p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)
-    );
-
-    displayProducts(filtered);
+/* ---------- Vista rápida ---------- */
+function openQV(id) {
+  current = view.findIndex(p => p.id === +id); if (current < 0) return;
+  fillQV(); $('#modal').classList.add('show'); $('#ov').classList.add('show'); document.body.classList.add('lock');
 }
-
-function scrollToCatalog() {
-    const catalogSection = document.getElementById('catalogSection');
-    if (catalogSection) {
-        catalogSection.scrollIntoView({ behavior: 'smooth' });
-    }
+function fillQV() {
+  const p = view[current];
+  $('#mimg').innerHTML = imgTag(p); $('#mcat').textContent = CATS[p.category] + ' · ' + p.tag; $('#mname').textContent = p.name;
+  $('#mprice').textContent = money(p.price); $('#mdesc').textContent = p.desc;
+  $('#mwa').href = wa(`Hola Lewis Skate, me interesa: ${p.name} (${money(p.price)}). ¿Tienen disponibilidad y tallas?`);
+  $$('.arrow').forEach(a => a.style.display = view.length > 1 ? '' : 'none'); updateFavUI();
 }
+const stepQV = d => { current = (current + d + view.length) % view.length; fillQV(); };
+function closeAll() { ['#modal', '#ov', '#drawer'].forEach(s => $(s).classList.remove('show')); document.body.classList.remove('lock'); }
+window.openImageModal = () => {}; window.closeImageModal = closeAll;
 
-function displayProducts(products) {
-    const grid = document.getElementById('productsGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
+/* ---------- Eventos ---------- */
+document.addEventListener('click', e => {
+  const t = e.target;
+  const fav = t.closest('[data-fav]'); if (fav) { e.stopPropagation(); return toggleFav(fav.dataset.fav); }
+  const card = t.closest('.card'); if (card) return openQV(card.dataset.id);
+  const cat = t.closest('[data-cat]'); if (cat) { $('.links').classList.remove('open'); return setCat(cat.dataset.cat); }
+  const rm = t.closest('[data-rm]'); if (rm) return toggleFav(rm.dataset.rm);
+});
+$('#q').addEventListener('input', e => { state.q = e.target.value.toLowerCase().trim(); render(); });
+$('#sort').addEventListener('change', e => { state.sort = e.target.value; render(); });
+$('#max').addEventListener('input', e => { state.max = +e.target.value; $('#maxv').textContent = money(state.max); render(); });
+$('#reset').addEventListener('click', () => { state.cat = 'all'; state.q = ''; state.max = MAXP; $('#q').value = ''; $('#max').value = MAXP; $('#maxv').textContent = money(MAXP); render(); });
+$('#hero-cta').addEventListener('click', scrollToCatalog);
+$('#mclose').addEventListener('click', closeAll); $('#ov').addEventListener('click', closeAll); $('#dclose').addEventListener('click', closeAll);
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeAll(); });
+$('#prev').addEventListener('click', () => stepQV(-1)); $('#next').addEventListener('click', () => stepQV(1));
+$('#mfav').addEventListener('click', () => toggleFav(view[current].id));
+$('#favbtn').addEventListener('click', () => { $('#drawer').classList.add('show'); $('#ov').classList.add('show'); document.body.classList.add('lock'); });
+$('#burger').addEventListener('click', () => $('.links').classList.toggle('open'));
+$('#searchbtn').addEventListener('click', () => { scrollToCatalog(); setTimeout(() => $('#q').focus(), 500); });
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeAll();
+  if ($('#modal').classList.contains('show')) { if (e.key === 'ArrowRight') stepQV(1); if (e.key === 'ArrowLeft') stepQV(-1); }
+  if (e.key === '/' && !/INPUT|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); $('#q').focus(); }
+});
 
-    if (products.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777; padding: 40px 0;">No se encontraron productos con esa búsqueda.</p>';
-        return;
-    }
+/* ---------- Efectos ---------- */
+const bg = $('.hero-bg');
+addEventListener('scroll', () => {
+  const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+  $('#progress').style.width = (h > 0 ? y / h * 100 : 0) + '%';
+  if (bg && y < innerHeight) bg.style.transform = `translateY(${y * .22}px)`;
+}, { passive: true });
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+$$('[data-reveal]').forEach(el => io.observe(el));
 
-    products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <div class="product-img-container">
-                <span class="product-tag">${product.tag}</span>
-                <img src="${product.img}" alt="${product.name}" onclick="openImageModal('${product.img}')">
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <p class="product-desc">${product.desc}</p>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-// --- FUNCIONES PARA EL LIGHTBOX DE IMÁGENES ---
-
-function openImageModal(imgSrc) {
-    const modal = document.getElementById('imageModalOverlay');
-    const expandedImg = document.getElementById('expandedImg');
-    if (modal && expandedImg) {
-        expandedImg.src = imgSrc;
-        modal.classList.add('active');
-    }
-}
-
-function closeImageModal() {
-    const modal = document.getElementById('imageModalOverlay');
-    if (modal) {
-        modal.classList.remove('active');
-    }
-}
+window.onload = () => { buildStatic(); render(); updateFavUI(); };
