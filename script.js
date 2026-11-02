@@ -1,143 +1,203 @@
-// Base de datos completa actualizada con tus modificaciones
-const productsData = [
-    // --- FRANELAS OVERSIZED (Tees) ---
-    { id: 10, category: 'tees', name: 'Tee Oversized Graffiti', price: 26.00, desc: 'Jersey de algodón 280GSM con serigrafía frontal urbana.', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=500&q=80', tag: 'Hot' },
-    { id: 11, category: 'tees', name: 'Tee Boxy Fit White', price: 24.00, desc: 'Cuello redondo acanalado grueso y calce cuadrado perfecto.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdhmNPv89k1bRZCkbBEayNtfrqgZZYnjBuH1zzFujjOQ&s=10', tag: 'Esencial' },
-    { id: 12, category: 'tees', name: 'Tee Dark Ritual', price: 28.00, desc: 'Gráfica frontal de alta durabilidad resistente a lavados.', img: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=500&q=80', tag: 'Nuevo' },
-    { id: 13, category: 'tees', name: 'Tee Minimalist Tag', price: 25.00, desc: 'Pequeño bordado lateral en contraste blanco sobre negro.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ-0jaWJcX0GUWXru2G_mYi05NjflFGgFoLPNG0lUFrBJRm7ShGJNmvPL-&s=10', tag: 'Clean' },
-    { id: 14, category: 'tees', name: 'Tee Heavy Asphalt', price: 27.00, desc: 'Textura suave con tratamiento pre-encogido de fábrica.', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=500&q=80', tag: 'Popular' },
-    { id: 15, category: 'tees', name: 'Tee Cyber Grid', price: 29.00, desc: 'Diseño geométrico inspirado en arquitectura brutalista.', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=500&q=80', tag: 'Limitado' },
-    { id: 16, category: 'tees', name: 'Tee Drop Shoulder Pure', price: 25.00, desc: 'Hombros caídos para un look relajado e impecable.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNwRQUIua2isy2KLqjY-mUJIWkdKbGzxuh0opHE_K6RQ&s=10', tag: 'Bestseller' },
-    { id: 17, category: 'tees', name: 'Tee Underground Club', price: 28.00, desc: 'Estampa posterior de gran formato con tinta ecológica.', img: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=500&q=80', tag: 'Hot' },
-    { id: 18, category: 'tees', name: 'Tee Blank Canvas White', price: 22.00, desc: 'Remera lisa versátil de máxima calidad y pureza visual.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ8wlyQb7oTNtJiY4EK0pIfucjtZFll_QQBl1omy_U9Q&s=10', tag: 'Básico' },
+// Lógica de la tienda. Los productos viven en data.js (productsData).
+const $ = (s, r = document) => r.querySelector(s);
+const WA = '584126613818';
+const NAMES = { all: 'Colección completa', tees: 'Franelas oversized', pants: 'Pantalones', caps: 'Gorras', accessories: 'Accesorios', fav: 'Tus favoritos' };
 
-    // --- PANTALONES (Pants) ---
-    { id: 19, category: 'pants', name: 'Pantalón Baggy Denim Dark', price: 54.00, desc: 'Denim rígido 14oz corte ancho extragrande para skate.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8rOqKkQ3kzHZ-EZJ5oAh0vqGXFZ7C7BPVteiaavrOf9pIIaIY56qmHgg&s=10', tag: 'Pro' },
-    { id: 20, category: 'pants', name: 'Cargo Parachute Black', price: 50.00, desc: 'Tela técnica ligera con múltiples bolsillos utilitarios.', img: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=500&q=80', tag: 'Trend' },
-    { id: 21, category: 'pants', name: 'Pantalon Worker Stitched', price: 56.00, desc: 'Costuras reforzadas de triple puntada y presillas anchas.', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=500&q=80', tag: 'Nuevo' },
-    { id: 22, category: 'pants', name: 'Pantalón Wide Leg White', price: 52.00, desc: 'Lona de algodón pesada en color blanco blanqueado.', img: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=500&q=80', tag: 'Exclusivo' },
-    { id: 23, category: 'pants', name: 'Cargo Industrial Straps', price: 58.00, desc: 'Correas ajustables y bolsillos de carga laterales profundos.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp0BUzcn8SualDqPbrrU6SI9HUH5Urj3NFxHQDqgON07tFBd3qiRuxAxtr&s=10', tag: 'Hot' },
-    { id: 24, category: 'pants', name: 'Pantalon Skate Fatigue', price: 49.00, desc: 'Corte holgado clásico diseñado para total libertad de movimiento.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW1kB_qzPCCGSRAoYdd5cnTlJlOZp__vJEZ3SuKYkbvg&s=10', tag: 'Popular' },
-    { id: 25, category: 'pants', name: 'Denim Washed Black Baggy', price: 55.00, desc: 'Lavado oscuro desgastado con efecto vintage natural.', img: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=500&q=80', tag: 'Bestseller' },
-    { id: 26, category: 'pants', name: 'Pantalón Track Nylon', price: 46.00, desc: 'Nylon impermeable de alta resistencia con cordón ajustable.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLhf1f76lVtMJpahD1ueKCZEykGk8cHZBGhBiluWtaRvAFenVCLFzQQFZD&s=10', tag: 'Sport' },
-    { id: 27, category: 'pants', name: 'Pantalon Heavy Twill', price: 53.00, desc: 'Sarga de algodón pesada con caída impecable sobre zapatillas.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLjE-CBBcmaXwt-s_yv5gN77j-n6tiv0ajPcdL54fn_3xWnpcGDgI_UdQ&s=10', tag: 'Nuevo' },
+const state = { cat: 'all', query: '', sort: 'default', favs: new Set(), onlyFavs: false };
 
-    // --- GORRAS (Caps) ---
-    { id: 28, category: 'caps', name: 'Gorra Snapback Urban', price: 19.00, desc: 'Visera plana con bordado frontal en relieve monocromático.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOgZm6paeL_qWF6P--8zyCWtpSmcTdpuciramBd4qrCw&s=10', tag: 'Essential' },
-    { id: 29, category: 'caps', name: 'Gorra urban', price: 16.00, desc: 'Frente estructurado de algodón con malla posterior ventilada.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZZnvnA5cxVrzpo4ikx7KzY1PmFsDuv8O9xbkZ3w5Ntw&s=10', tag: 'Hot' },
-    { id: 37, category: 'caps', name: 'Gorra Dad Hat Monochrome', price: 18.00, desc: 'Diseño clásico curvado con hebilla metálica ajustable.', img: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=500&q=80', tag: 'Nuevo' },
-    { id: 38, category: 'caps', name: 'Gorra Trucker Mesh Black', price: 17.00, desc: 'Frente estructurado de algodón con malla posterior ventilada.', img: 'https://http2.mlstatic.com/D_NQ_NP_722134-MLV109893759509_032026-O.webp', tag: 'Popular' },
-    { id: 39, category: 'caps', name: 'Gorra Bucket Hat Tech', price: 20.00, desc: 'Sombrero estilo pescador en tejido impermeable técnico.', img: 'https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=500&q=80', tag: 'Trend' },
+try { JSON.parse(localStorage.getItem('lewis_favs') || '[]').forEach(id => state.favs.add(id)); } catch (e) {}
+const saveFavs = () => { try { localStorage.setItem('lewis_favs', JSON.stringify([...state.favs])); } catch (e) {} };
 
-    // --- ACCESORIOS (Accessories) ---
-    { id: 30, category: 'accessories', name: 'Cangurera Crossbody Tech', price: 24.00, desc: 'Bolso bandolera impermeable con cremalleras selladas.', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=80', tag: 'Utilidad' },
-    { id: 31, category: 'accessories', name: 'Medias Altas Skate Pack x3', price: 15.00, desc: 'Algodón peinado reforzado en talón y puntera con líneas.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKeiomgxGkwmDDW5b4PTeZ8owUyEWS_lortBO751ZJ0g&s', tag: 'Pack x3' },
-    { id: 32, category: 'accessories', name: 'Cinto Industrial Heavy Buckle', price: 18.00, desc: 'Cinturón de lona con hebilla metálica de liberación rápida.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxM8OFnog0epG6ri3YN-u39bCUZpFpfpOtw5DrmrwukQ&s=10', tag: 'Nuevo' },
-    { id: 33, category: 'accessories', name: 'Bandana Paisley Monochrome', price: 10.00, desc: 'Pañuelo de algodón puro con estampado clásico en blanco y negro.', img: 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?auto=format&fit=crop&w=500&q=80', tag: 'Clásico' },
-    { id: 34, category: 'accessories', name: 'Mochila Rolltop Tactical', price: 65.00, desc: 'Mochila de gran capacidad con compartimento para portátil.', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=80', tag: 'Pro' },
-    { id: 35, category: 'accessories', name: 'Llavero Lanyard Industrial', price: 9.00, desc: 'Cinta resistente con herraje metálico de alta durabilidad.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ShaXN4zaBxtyLJtulwH-X4itlBDAPjILXv2NGj6HWw&s=10', tag: 'Detalle' },
-    { id: 36, category: 'accessories', name: 'Gafas de Sol Cyberpunk', price: 22.00, desc: 'Montura geométrica oscura con protección UV400 total.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm8hX6a8w37054qLAp47u-6xGvWcgW03oh8ms8rOL3lQ&s=10', tag: 'Limitado' }
-];
+const grid = $('#productsGrid');
+const money = n => '$' + n.toFixed(2);
+const FALLBACK = 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=500&q=80';
 
-let currentCategory = 'all';
+// Observer que revela las tarjetas al entrar en pantalla
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
 
-window.onload = function() {
-    displayProducts(productsData);
-};
-
-// Función para filtrar productos por categoría desde el menú desplegable
-function filterCategory(category) {
-    currentCategory = category;
-    const titleHeader = document.getElementById('sectionTitleHeader');
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.value = ''; // Limpiar buscador al cambiar categoría
-    
-    if (category === 'all') {
-        if (titleHeader) titleHeader.innerText = "Catálogo Completo";
-        displayProducts(productsData);
-    } else {
-        const filtered = productsData.filter(p => p.category === category);
-        const categoryNames = {
-            'tees': 'Franelas Oversized',
-            'pants': 'Pantalones',
-            'caps': 'Gorras',
-            'accessories': 'Accesorios'
-        };
-        if (titleHeader) titleHeader.innerText = categoryNames[category] || 'Catálogo';
-        displayProducts(filtered);
-    }
-    
-    scrollToCatalog();
+function getList() {
+  let list = productsData.filter(p =>
+    (state.onlyFavs ? state.favs.has(p.id) : (state.cat === 'all' || p.category === state.cat)) &&
+    (p.name + ' ' + p.desc).toLowerCase().includes(state.query)
+  );
+  if (state.sort === 'asc') list.sort((a, b) => a.price - b.price);
+  if (state.sort === 'desc') list.sort((a, b) => b.price - a.price);
+  if (state.sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
+  return list;
 }
 
-// Función de Búsqueda en tiempo real
-function handleSearch() {
-    const searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
-    const query = searchInput.value.toLowerCase().trim();
+function render() {
+  const list = getList();
+  $('#catalogTitle').textContent = state.onlyFavs ? NAMES.fav : NAMES[state.cat];
+  $('#resultCount').textContent = list.length + (list.length === 1 ? ' prenda' : ' prendas');
+  grid.innerHTML = '';
 
-    // Tomar la base según la categoría actual
-    let baseList = currentCategory === 'all' 
-        ? productsData 
-        : productsData.filter(p => p.category === currentCategory);
+  if (!list.length) {
+    grid.innerHTML = `<p class="empty">${state.onlyFavs ? 'Aún no guardas favoritos. Toca el corazón en una prenda.' : 'No hay prendas con esa búsqueda. Prueba otra palabra.'}</p>`;
+    return;
+  }
 
-    // Filtrar por nombre o descripción
-    const filtered = baseList.filter(p => 
-        p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)
-    );
-
-    displayProducts(filtered);
+  list.forEach((p, i) => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.id = p.id;
+    card.style.transitionDelay = (i % 4) * 90 + 'ms';
+    card.innerHTML = `
+      <div class="card-img">
+        <span class="tag">${p.tag}</span>
+        <button class="heart ${state.favs.has(p.id) ? 'on' : ''}" data-fav="${p.id}" aria-label="Guardar en favoritos">
+          <i class="${state.favs.has(p.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+        </button>
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+        <div class="quick">Vista rápida</div>
+      </div>
+      <div class="card-info">
+        <h3 class="card-name">${p.name}</h3>
+        <span class="card-price">${money(p.price)}</span>
+      </div>`;
+    card.querySelector('img').onerror = e => { e.target.onerror = null; e.target.src = FALLBACK; };
+    grid.appendChild(card);
+    io.observe(card);
+  });
 }
 
-function scrollToCatalog() {
-    const catalogSection = document.getElementById('catalogSection');
-    if (catalogSection) {
-        catalogSection.scrollIntoView({ behavior: 'smooth' });
-    }
+function updateFavUI() {
+  $('#favCount').textContent = state.favs.size;
+  const btn = $('#favToggle');
+  btn.classList.add('bump');
+  setTimeout(() => btn.classList.remove('bump'), 400);
+  btn.classList.toggle('active', state.onlyFavs);
+  btn.querySelector('i').className = (state.favs.size ? 'fa-solid' : 'fa-regular') + ' fa-heart';
 }
 
-function displayProducts(products) {
-    const grid = document.getElementById('productsGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
+function toggleFav(id) {
+  state.favs.has(id) ? state.favs.delete(id) : state.favs.add(id);
+  saveFavs();
+  updateFavUI();
+  if (state.onlyFavs) render();
+}
 
-    if (products.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777; padding: 40px 0;">No se encontraron productos con esa búsqueda.</p>';
-        return;
-    }
+// --- Eventos del catálogo ---
+$('#filters').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  state.cat = chip.dataset.cat;
+  state.onlyFavs = false;
+  updateFavUI();
+  render();
+});
 
-    products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <div class="product-img-container">
-                <span class="product-tag">${product.tag}</span>
-                <img src="${product.img}" alt="${product.name}" onclick="openImageModal('${product.img}')">
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <p class="product-desc">${product.desc}</p>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
-            </div>
-        `;
-        grid.appendChild(card);
+$('#searchInput').addEventListener('input', e => { state.query = e.target.value.toLowerCase().trim(); render(); });
+$('#sortSelect').addEventListener('change', e => { state.sort = e.target.value; render(); });
+
+$('#favToggle').addEventListener('click', () => {
+  state.onlyFavs = !state.onlyFavs;
+  if (state.onlyFavs) document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  else document.querySelector(`.chip[data-cat="${state.cat}"]`).classList.add('active');
+  updateFavUI();
+  render();
+  $('#coleccion').scrollIntoView({ behavior: 'smooth' });
+});
+
+grid.addEventListener('click', e => {
+  const heart = e.target.closest('[data-fav]');
+  if (heart) {
+    e.stopPropagation();
+    const id = +heart.dataset.fav;
+    toggleFav(id);
+    const on = state.favs.has(id);
+    heart.classList.toggle('on', on);
+    heart.querySelector('i').className = (on ? 'fa-solid' : 'fa-regular') + ' fa-heart';
+    return;
+  }
+  const card = e.target.closest('.card');
+  if (card) openModal(+card.dataset.id);
+});
+
+// --- Vista rápida ---
+const modal = $('#modal');
+let currentId = null;
+
+function openModal(id) {
+  const p = productsData.find(x => x.id === id);
+  if (!p) return;
+  currentId = id;
+  $('#mImg').src = p.img;
+  $('#mImg').alt = p.name;
+  $('#mTag').textContent = p.tag;
+  $('#mName').textContent = p.name;
+  $('#mDesc').textContent = p.desc;
+  $('#mPrice').textContent = money(p.price);
+  $('#mBuy').href = `https://wa.me/${WA}?text=` + encodeURIComponent(`Hola, quiero pedir: ${p.name} (${money(p.price)}). ¿Qué tallas hay disponibles?`);
+  syncModalFav();
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('lock');
+}
+
+function closeModal() {
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('lock');
+}
+
+function syncModalFav() {
+  const on = state.favs.has(currentId);
+  $('#mFav i').className = (on ? 'fa-solid' : 'fa-regular') + ' fa-heart';
+  $('#mFav span').textContent = on ? 'Quitar de favoritos' : 'Guardar en favoritos';
+}
+
+modal.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+$('#mFav').addEventListener('click', () => {
+  toggleFav(currentId);
+  syncModalFav();
+  const h = grid.querySelector(`[data-fav="${currentId}"]`);
+  if (h) {
+    const on = state.favs.has(currentId);
+    h.classList.toggle('on', on);
+    h.querySelector('i').className = (on ? 'fa-solid' : 'fa-regular') + ' fa-heart';
+  }
+});
+
+// --- Efectos de scroll: barra de progreso, header y parallax del hero ---
+const header = $('#header'), bar = $('#progress'), heroImg = $('#heroImg');
+let ticking = false;
+function onScroll() {
+  const y = window.scrollY;
+  const max = document.documentElement.scrollHeight - innerHeight;
+  bar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+  header.classList.toggle('scrolled', y > 40);
+  if (y < innerHeight && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroImg.style.transform = `translateY(${-y * 0.08}px)`;
+  }
+  ticking = false;
+}
+addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });
+
+// --- Botón magnético (solo con mouse) ---
+if (matchMedia('(hover: hover)').matches) {
+  document.querySelectorAll('.magnetic').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.25}px, ${(e.clientY - r.top - r.height / 2) * 0.35}px)`;
     });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
 }
 
-// --- FUNCIONES PARA EL LIGHTBOX DE IMÁGENES ---
-
-function openImageModal(imgSrc) {
-    const modal = document.getElementById('imageModalOverlay');
-    const expandedImg = document.getElementById('expandedImg');
-    if (modal && expandedImg) {
-        expandedImg.src = imgSrc;
-        modal.classList.add('active');
-    }
-}
-
-function closeImageModal() {
-    const modal = document.getElementById('imageModalOverlay');
-    if (modal) {
-        modal.classList.remove('active');
-    }
-}
+// --- Inicio: carga + entrada del hero ---
+updateFavUI();
+render();
+onScroll();
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    $('#preloader').classList.add('done');
+    document.body.classList.add('loaded');
+    setTimeout(() => $('#preloader').remove(), 1400);
+  }, 1300);
+});

@@ -1,119 +1,144 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>URBAN SKATE LWIS. • Black & White Edition</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBAN • SKATE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Barra de Navegación -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="brand-title">LEWI<span>SKATE</span></a>
-            
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <div class="nav-link" style="cursor: pointer;">
-                        Catalogo <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
-                    </div>
-                    <div class="dropdown-menu">
-                        <button class="dropdown-item" onclick="filterCategory('all')">Ver Todo (36)</button>
-                        <button class="dropdown-item" onclick="filterCategory('tees')">Franelas Oversized</button>
-                        <button class="dropdown-item" onclick="filterCategory('pants')">Pantalones</button>
-                        <button class="dropdown-item" onclick="filterCategory('caps')">Gorras</button>
-                        <button class="dropdown-item" onclick="filterCategory('accessories')">Accesorios</button>
-                    </div>
-                </li>
-            </ul>
-        </div>
+<div class="progress" id="progress"></div>
+
+<!-- Pantalla de carga -->
+<div class="preloader" id="preloader">
+  <div class="preloader-brand">URBAN SKATE</div>
+  <div class="preloader-line"><span></span></div>
+</div>
+
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#inicio" class="brand">URBAN <em>SKATE</em></a>
+    <nav class="nav">
+      <a href="#coleccion">Colección</a>
+      <a href="#contacto">Contacto</a>
+      <button class="fav-btn" id="favToggle" aria-label="Ver favoritos">
+        <i class="fa-regular fa-heart"></i><span id="favCount">0</span>
+      </button>
     </nav>
+  </div>
+</header>
 
-    <!-- Contenedor Principal -->
-    <div class="main-container">
-        
-        <!-- Banner Principal Monocromático -->
-        <section class="hero-banner">
-            <img src="https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="hero-bg-img">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1>Monochrome Streetwear 2026</h1>
-                <p>Indumentaria pesada de alta gama. Expresión urbana pura reducida a su máxima expresión en blanco y negro.</p>
-                <button class="hero-btn" onclick="scrollToCatalog()">Ver Colección Completa</button>
-            </div>
-        </section>
+<main>
+  <section class="hero" id="inicio">
+    <div class="hero-text">
+      <h1 id="heroTitle">
+        <span class="line"><span>Monochrome</span></span>
+        <span class="line"><span><em>Streetwear</em> 2026</span></span>
+      </h1>
+      <p class="hero-sub">Prendas pesadas, corte amplio y cero color. Hecho para el asfalto.</p>
+      <a href="#coleccion" class="btn magnetic">Ver colección</a>
+    </div>
+    <div class="hero-media">
+      <img id="heroImg" src="https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=1400&q=80" alt="Streetwear en blanco y negro">
+    </div>
+    <div class="scroll-cue"><span></span></div>
+  </section>
 
-        <!-- Catálogo Dinámico con Buscador -->
-        <section id="catalogSection">
-            <div class="catalog-header-flex">
-                <h2 class="section-title" id="sectionTitleHeader">Catálogo Completo</h2>
-                
-                <!-- Barra de Buscador -->
-                <div class="search-box-container">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="Buscar franelas, pantalones, gorras..." oninput="handleSearch()">
-                </div>
-            </div>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Franelas oversized</span><span>Pantalones baggy</span><span>Gorras</span><span>Accesorios</span>
+      <span>Franelas oversized</span><span>Pantalones baggy</span><span>Gorras</span><span>Accesorios</span>
+    </div>
+  </div>
 
-            <div class="products-grid" id="productsGrid">
-                <!-- Se llena automáticamente con JavaScript -->
-            </div>
-        </section>
-
+  <section class="catalog" id="coleccion">
+    <div class="catalog-head">
+      <h2 id="catalogTitle">Colección completa</h2>
+      <p class="count" id="resultCount"></p>
     </div>
 
-    <!-- Botón Flotante de WhatsApp -->
-    <a href="https://wa.me/584126613818?text=Hola,%20estoy%20viendo%20el%20catálogo%20de%20Lewis%20Skate%20y%20quiero%20más%20información." class="floating-whatsapp" target="_blank" aria-label="Contactar por WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-    <!-- Script con la lógica -->
-    <script src="script.js"></script>
-
-    <!-- Pie de Página (Footer) -->
-    <footer class="footer">
-        <div class="footer-container">
-            <!-- Columna 1: Logo y descripción -->
-            <div class="footer-col">
-                <a href="#" class="brand-title" style="display: inline-block; margin-bottom: 15px;">LEWI<span>SKATE</span></a>
-                <p>Indumentaria pesada de alta gama y streetwear monocromático. Expresión urbana pura sin concesiones.</p>
-            </div>
-
-            <!-- Columna 2: Redes Sociales -->
-            <div class="footer-col">
-                <h3>Redes Sociales</h3>
-                <p>Síguenos para ver los drops exclusivos y contenido del asfalto.</p>
-                <div class="footer-socials">
-                    <a href="https://instagram.com" target="_blank" class="social-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://tiktok.com" target="_blank" class="social-icon-btn" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="https://whatsapp.com" target="_blank" class="social-icon-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                </div>
-            </div>
-
-            <!-- Columna 3: Contacto -->
-            <div class="footer-col">
-                <h3>Contacto</h3>
-                <ul class="footer-contact-list">
-                    <li><i class="fa-solid fa-location-dot"></i> Calle Principal, Local 4, Zona Urbana</li>
-                    <li><i class="fa-solid fa-phone"></i> +58 412 6613818</li>
-                    <li><i class="fa-solid fa-envelope"></i> habanolewis@gmail.com</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2026 LEWIS SKATE. Todos los derechos reservados.</p>
-            <p>Black & White Edition</p>
-        </div>
-    </footer>
-
-    <!-- Ventana Modal para Ver Imagen a Tamaño Completo -->
-    <div class="image-modal-overlay" id="imageModalOverlay" onclick="closeImageModal()">
-        <button class="close-image-modal" onclick="closeImageModal()"><i class="fa-solid fa-xmark"></i></button>
-        <img class="image-modal-content" id="expandedImg" alt="Imagen ampliada">
+    <div class="toolbar">
+      <div class="filters" id="filters">
+        <button class="chip active" data-cat="all">Todo</button>
+        <button class="chip" data-cat="tees">Franelas</button>
+        <button class="chip" data-cat="pants">Pantalones</button>
+        <button class="chip" data-cat="caps">Gorras</button>
+        <button class="chip" data-cat="accessories">Accesorios</button>
+      </div>
+      <div class="tools">
+        <label class="search"><i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="searchInput" placeholder="Buscar prenda" autocomplete="off">
+        </label>
+        <select id="sortSelect" aria-label="Ordenar">
+          <option value="default">Destacados</option>
+          <option value="asc">Precio: menor a mayor</option>
+          <option value="desc">Precio: mayor a menor</option>
+          <option value="name">Nombre A-Z</option>
+        </select>
+      </div>
     </div>
+
+    <div class="grid" id="productsGrid"></div>
+  </section>
+</main>
+
+<footer class="footer" id="contacto">
+  <div class="footer-big">Vístete en blanco y negro.</div>
+  <div class="footer-grid">
+    <div>
+      <h3>Lewis Skate</h3>
+      <p>Indumentaria pesada de alta gama y streetwear monocromático.</p>
+    </div>
+    <div>
+      <h3>Redes</h3>
+      <div class="socials">
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://wa.me/584126613818" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <ul>
+        <li><i class="fa-solid fa-location-dot"></i> Calle Principal, Local 4, Zona Urbana</li>
+        <li><i class="fa-solid fa-phone"></i> +58 412 6613818</li>
+        <li><i class="fa-solid fa-envelope"></i> habanolewis@gmail.com</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Lewis Skate. Todos los derechos reservados.</span>
+    <span>Black &amp; White Edition</span>
+  </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="https://wa.me/584126613818?text=Hola,%20estoy%20viendo%20el%20catálogo%20de%20Lewis%20Skate%20y%20quiero%20más%20información." target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- Vista rápida -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mName">
+    <button class="modal-close" data-close aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-img"><img id="mImg" alt=""></div>
+    <div class="modal-info">
+      <span class="tag" id="mTag"></span>
+      <h3 id="mName"></h3>
+      <p id="mDesc"></p>
+      <div class="modal-price" id="mPrice"></div>
+      <a class="btn full" id="mBuy" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp</a>
+      <button class="btn ghost full" id="mFav"><i class="fa-regular fa-heart"></i> <span>Guardar en favoritos</span></button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
